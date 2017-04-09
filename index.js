@@ -1,3 +1,6 @@
+var server = require('./server');
+var router = require('./router');
+
 var handle = {};
 handle['/'] = home;
 handle['/authorize'] = authorize;
