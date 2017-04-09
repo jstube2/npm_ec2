@@ -11,7 +11,7 @@ var credentials = {
 };
 var oauth2 = require('simple-oauth2')(credentials);
 
-var redirectUri = 'https://34.205.29.189:80';
+var redirectUri = 'https://ec2-34-205-29-189.compute-1.amazonaws.com:4443/';
 
 // The scopes the app requires
 var scopes = [ 'openid',
