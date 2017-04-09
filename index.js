@@ -1,4 +1,14 @@
-const express = require('express')
-const app = express()
-app.use(express.static('public'))
-app.listen(3000, () => console.log('Server running on port 3000'))
+var server = require('./server');
+var router = require('./router');
+
+var handle = {};
+handle['/'] = home;
+
+server.start(router.route, handle);
+
+function home(response, request) {
+  console.log('Request handler \'home\' was called.');
+  response.writeHead(200, {'Content-Type': 'text/html'});
+  response.write('<p>Hello world!</p>');
+  response.end();
+}
