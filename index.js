@@ -1,6 +1,8 @@
 var server = require('./server');
 var router = require('./router');
 var outlook = require('node-outlook');
+var url = require('url');
+var authHelper = require('./authHelper');
 
 var handle = {};
 handle['/'] = home;
@@ -15,10 +17,9 @@ function home(response, request) {
   response.end();
 }
 
-var url = require('url');
+
 function authorize(response, request) {
   console.log('Request handler \'authorize\' was called.');
-  
   // The authorization code is passed as a query parameter
   var url_parts = url.parse(request.url, true);
   var code = url_parts.query.code;
