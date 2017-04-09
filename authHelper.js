@@ -27,3 +27,23 @@ function getAuthUrl() {
 }
 
 exports.getAuthUrl = getAuthUrl;
+
+function getTokenFromCode(auth_code, callback, response) {
+  var token;
+  oauth2.authorizationCode.getToken({
+    code: auth_code,
+    redirect_uri: redirectUri,
+    scope: scopes.join(' ')
+  }, function (error, result) {
+    if (error) {
+      console.log('Access token error: ', error.message);
+      callback(response, error, null);
+    } else {
+      token = oauth2.accessToken.create(result);
+      console.log('Token created: ', token.token);
+      callback(response, null, token);
+    }
+  });
+}
+
+exports.getTokenFromCode = getTokenFromCode;
