@@ -68,3 +68,11 @@ function tokenReceived(response, error, token) {
     });
   }
 }
+function getValueFromCookie(valueName, cookie) {
+  if (cookie.indexOf(valueName) !== -1) {
+    var start = cookie.indexOf(valueName) + valueName.length + 1;
+    var end = cookie.indexOf(';', start);
+    end = end === -1 ? cookie.length : end;
+    return cookie.substring(start, end);
+  }
+}
