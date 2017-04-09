@@ -1,6 +1,6 @@
 var credentials = {
   client: {
-    id: ''cbf0bfc4-dc48-4f3c-a897-fa983a054150',
+    id: 'cbf0bfc4-dc48-4f3c-a897-fa983a054150',
     secret: 'wzukaYCbHs8vna4oYhc6Rsz',
   },
   auth: {
