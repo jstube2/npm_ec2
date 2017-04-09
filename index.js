@@ -27,3 +27,21 @@ function authorize(response, request) {
   response.write('<p>Received auth code: ' + code + '</p>');
   response.end();
 }
+
+function getUserEmail(token, callback) {
+  // Set the API endpoint to use the v2.0 endpoint
+  outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
+
+  // Set up oData parameters
+  var queryParams = {
+    '$select': 'DisplayName, EmailAddress',
+  };
+
+  outlook.base.getUser({token: token, odataParams: queryParams}, function(error, user){
+    if (error) {
+      callback(error, null);
+    } else {
+      callback(null, user.EmailAddress);
+    }
+  });
+}
