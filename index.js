@@ -13,6 +13,7 @@ function home(response, request) {
   response.write('<p>Please <a href="' + authHelper.getAuthUrl() + '">sign in</a> with your Office 365 or Outlook.com account.</p>');
   response.end();
 }
+
 var url = require('url');
 function authorize(response, request) {
   console.log('Request handler \'authorize\' was called.');
