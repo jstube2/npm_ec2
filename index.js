@@ -46,3 +46,25 @@ function getUserEmail(token, callback) {
     }
   });
 }
+
+function tokenReceived(response, error, token) {
+  if (error) {
+    console.log('Access token error: ', error.message);
+    response.writeHead(200, {'Content-Type': 'text/html'});
+    response.write('<p>ERROR: ' + error + '</p>');
+    response.end();
+  } else {
+    getUserEmail(token.token.access_token, function(error, email) {
+      if (error) {
+        console.log('getUserEmail returned an error: ' + error);
+        response.write('<p>ERROR: ' + error + '</p>');
+        response.end();
+      } else if (email) {
+        response.writeHead(200, {'Content-Type': 'text/html'});
+        response.write('<p>Email: ' + email + '</p>');
+        response.write('<p>Access token: ' + token.token.access_token + '</p>');
+        response.end();
+      }
+    });
+  }
+}
