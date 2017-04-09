@@ -45,5 +45,13 @@ function getTokenFromCode(auth_code, callback, response) {
     }
   });
 }
-
+function authorize(response, request) {
+  console.log('Request handler \'authorize\' was called.');
+  
+  // The authorization code is passed as a query parameter
+  var url_parts = url.parse(request.url, true);
+  var code = url_parts.query.code;
+  console.log('Code: ' + code);
+  authHelper.getTokenFromCode(code, tokenReceived, response);
+}
 exports.getTokenFromCode = getTokenFromCode;
