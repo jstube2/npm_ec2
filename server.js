@@ -6,8 +6,8 @@ var https = require('https');
 var app = express();
 
 var options = {
-    key: fs.readFileSync('server-key.pem'),
-    cert: fs.readFileSync('server-crt.pem'),
+    key: fs.readFileSync('privatekey.pem'),
+    cert: fs.readFileSync('server.crt'),
 };
 
 function start(route, handle) {
