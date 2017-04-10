@@ -7,6 +7,7 @@ var authHelper = require('./authHelper');
 var handle = {};
 handle['/'] = home;
 handle['/authorize'] = authorize;
+handle['/mail'] = mail;
 
 server.start(router.route, handle);
 
@@ -75,4 +76,21 @@ function getValueFromCookie(valueName, cookie) {
     end = end === -1 ? cookie.length : end;
     return cookie.substring(start, end);
   }
+}
+
+function mail(response, request) {
+  getAccessToken(request, response, function(error, token) {
+    console.log('Token found in cookie: ', token);
+    var email = getValueFromCookie('node-tutorial-email', request.headers.cookie);
+    console.log('Email found in cookie: ', email);
+    if (token) {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+      response.write('<p>Token retrieved from cookie: ' + token + '</p>');
+      response.end();
+    } else {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+      response.write('<p> No token found in cookie!</p>');
+      response.end();
+    }
+  });
 }
