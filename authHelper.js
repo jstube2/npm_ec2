@@ -47,6 +47,13 @@ function getTokenFromCode(auth_code, callback, response) {
     }
   });
 }
+function refreshAccessToken(refreshToken, callback) {
+  var tokenObj = oauth2.accessToken.create({refresh_token: refreshToken});
+  tokenObj.refresh(callback);
+}
+
+exports.refreshAccessToken = refreshAccessToken;
+
 function authorize(response, request) {
   console.log('Request handler \'authorize\' was called.');
   
