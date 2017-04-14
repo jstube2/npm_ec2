@@ -21,13 +21,12 @@ function home(response, request) {
 
 function authorize(response, request) {
   console.log('Request handler \'authorize\' was called.');
+  
   // The authorization code is passed as a query parameter
   var url_parts = url.parse(request.url, true);
   var code = url_parts.query.code;
   console.log('Code: ' + code);
-  response.writeHead(200, {'Content-Type': 'text/html'});
-  response.write('<p>Received auth code: ' + code + '</p>');
-  response.end();
+  authHelper.getTokenFromCode(code, tokenReceived, response);
 }
 
 function getUserEmail(token, callback) {
@@ -55,18 +54,19 @@ function tokenReceived(response, error, token) {
     response.write('<p>ERROR: ' + error + '</p>');
     response.end();
   } else {
-    getUserEmail(token.token.access_token, function(error, email) {
+    getUserEmail(token.token.access_token, function(error, email){
       if (error) {
         console.log('getUserEmail returned an error: ' + error);
         response.write('<p>ERROR: ' + error + '</p>');
         response.end();
       } else if (email) {
-        response.writeHead(200, {'Content-Type': 'text/html'});
-        response.write('<p>Email: ' + email + '</p>');
-        response.write('<p>Access token: ' + token.token.access_token + '</p>');
+        var cookies = ['node-tutorial-token=' + token.token.access_token + ';Max-Age=3600',
+                       'node-tutorial-email=' + email + ';Max-Age=3600'];
+        response.setHeader('Set-Cookie', cookies);
+        response.writeHead(302, {'Location': 'http://localhost:8000/mail'});
         response.end();
       }
-    });
+    }); 
   }
 }
 function getValueFromCookie(valueName, cookie) {
@@ -91,6 +91,23 @@ function mail(response, request) {
       response.writeHead(200, {'Content-Type': 'text/html'});
       response.write('<p> No token found in cookie!</p>');
       response.end();
+    }
+  });
+}
+function getUserEmail(token, callback) {
+  // Set the API endpoint to use the v2.0 endpoint
+  outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
+
+  // Set up oData parameters
+  var queryParams = {
+    '$select': 'DisplayName, EmailAddress',
+  };
+
+  outlook.base.getUser({token: token, odataParams: queryParams}, function(error, user){
+    if (error) {
+      callback(error, null);
+    } else {
+      callback(null, user.EmailAddress);
     }
   });
 }
