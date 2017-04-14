@@ -14,7 +14,9 @@ var oauth2 = require('simple-oauth2').create(credentials);
 var redirectUri = 'https://ec2-34-205-29-189.compute-1.amazonaws.com:4443/';
 
 // The scopes the app requires
+// The scopes the app requires
 var scopes = [ 'openid',
+               'offline_access',
                'https://outlook.office.com/mail.read' ];
     
 function getAuthUrl() {
