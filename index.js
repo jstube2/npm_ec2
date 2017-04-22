@@ -8,7 +8,7 @@ var handle = {};
 handle['/'] = home;
 handle['/authorize'] = authorize;
 handle['/mail'] = mail;
-//handle['/calendar'] = calendar;
+handle['/calendar'] = calendar;
 
 server.start(router.route, handle);
 
@@ -65,7 +65,7 @@ function tokenReceived(response, error, token) {
                        'node-tutorial-token-expires=' + token.token.expires_at.getTime() + ';Max-Age=4000',
                        'node-tutorial-email=' + email + ';Max-Age=4000'];
         response.setHeader('Set-Cookie', cookies);
-        response.writeHead(302, {'Location': 'ec2-34-205-29-189.compute-1.amazonaws.com:4443/mail'});
+        response.writeHead(302, {'Location': 'ec2-34-205-29-189.compute-1.amazonaws.com:4443/calendar'});
         response.end();
       }
     }); 
@@ -174,4 +174,55 @@ function mail(response, request) {
   });
 }
 
+//************************************************************************
 
+function calendar(response, request) {
+  getAccessToken(request, response, function(error, token) {
+    console.log('Token found in cookie: ', token);
+    var email = getValueFromCookie('node-tutorial-email', request.headers.cookie);
+    console.log('Email found in cookie: ', email);
+    if (token) {
+ response.writeHead(200, {'Content-Type': 'text/html'});
+response.write('<div><h1>Your calendar</h1></div>');
+
+var queryParams = {
+  '$select': 'Subject,Start,End',
+  '$orderby': 'Start/DateTime desc',
+  '$top': 10
+};
+
+// Set the API endpoint to use the v2.0 endpoint
+outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
+// Set the anchor mailbox to the user's SMTP address
+outlook.base.setAnchorMailbox(email);
+// Set the preferred time zone.
+// The API will return event date/times in this time zone.
+outlook.base.setPreferredTimeZone('Eastern Standard Time');
+
+outlook.calendar.getEvents({token: token, odataParams: queryParams},
+  function(error, result){
+    if (error) {
+      console.log('getEvents returned an error: ' + error);
+      response.write('<p>ERROR: ' + error + '</p>');
+      response.end();
+    } else if (result) {
+      console.log('getEvents returned ' + result.value.length + ' events.');
+      response.write('<table><tr><th>Subject</th><th>Start</th><th>End</th></tr>');
+      result.value.forEach(function(event) {
+      console.log('  Subject: ' + event.Subject);
+      response.write('<tr><td>' + event.Subject + 
+        '</td><td>' + event.Start.DateTime.toString() +
+        '</td><td>' + event.End.DateTime.toString() + '</td></tr>');
+      });
+
+      response.write('</table>');
+      response.end();
+    }
+  });
+    } else {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+      response.write('<p> No token found in cookie!</p>');
+      response.end();
+    }
+  });
+}
