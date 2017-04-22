@@ -3,3 +3,5 @@ node_modules
 privatekey.pem
 server.crt
 csr.pem
+package.json
+public
