@@ -18,7 +18,6 @@ function home(response, request) {
   response.end();
 }
 
-
 function authorize(response, request) {
   console.log('Request handler \'authorize\' was called.');
   
@@ -97,23 +96,7 @@ function mail(response, request) {
     }
   });
 }
-function getUserEmail(token, callback) {
-  // Set the API endpoint to use the v2.0 endpoint
-  outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
 
-  // Set up oData parameters
-  var queryParams = {
-    '$select': 'DisplayName, EmailAddress',
-  };
-
-  outlook.base.getUser({token: token, odataParams: queryParams}, function(error, user){
-    if (error) {
-      callback(error, null);
-    } else {
-      callback(null, user.EmailAddress);
-    }
-  });
-}
 function getAccessToken(request, response, callback) {
   var expiration = new Date(parseFloat(getValueFromCookie('node-tutorial-token-expires', request.headers.cookie)));
 
@@ -138,6 +121,7 @@ function getAccessToken(request, response, callback) {
     callback(null, access_token);
   }
 }
+
 function mail(response, request) {
   getAccessToken(request, response, function(error, token) {
     console.log('Token found in cookie: ', token);
