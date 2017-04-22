@@ -16,8 +16,7 @@ var redirectUri = 'https://ec2-34-205-29-189.compute-1.amazonaws.com:4443/';
 // The scopes the app requires
 // The scopes the app requires
 var scopes = [ 'openid',
-               'https://outlook.office.com/mail.read',
-               'https://outlook.office.com/calendars.read.shared'];
+               'https://outlook.office.com/mail.read'];
     
 function getAuthUrl() {
   var returnVal = oauth2.authorizationCode.authorizeURL({
@@ -54,13 +53,4 @@ function refreshAccessToken(refreshToken, callback) {
 
 exports.refreshAccessToken = refreshAccessToken;
 
-function authorize(response, request) {
-  console.log('Request handler \'authorize\' was called.');
-  
-  // The authorization code is passed as a query parameter
-  var url_parts = url.parse(request.url, true);
-  var code = url_parts.query.code;
-  console.log('Code: ' + code);
-  authHelper.getTokenFromCode(code, tokenReceived, response);
-}
 exports.getTokenFromCode = getTokenFromCode;
