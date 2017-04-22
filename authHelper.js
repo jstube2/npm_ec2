@@ -16,6 +16,7 @@ var redirectUri = 'https://ec2-34-205-29-189.compute-1.amazonaws.com:4443/author
 // The scopes the app requires
 // The scopes the app requires
 var scopes = [ 'openid',
+              'https://outlook.office.com/calendars.read'
                'https://outlook.office.com/mail.read'];
     
 function getAuthUrl() {
