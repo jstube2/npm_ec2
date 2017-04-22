@@ -11,7 +11,7 @@ var credentials = {
 };
 var oauth2 = require('simple-oauth2').create(credentials);
 
-var redirectUri = 'https://ec2-34-205-29-189.compute-1.amazonaws.com:4443/';
+var redirectUri = 'https://ec2-34-205-29-189.compute-1.amazonaws.com:4443/authorize';
 
 // The scopes the app requires
 // The scopes the app requires
