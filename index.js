@@ -8,7 +8,7 @@ var handle = {};
 handle['/'] = home;
 handle['/authorize'] = authorize;
 handle['/mail'] = mail;
-handle['/calendar'] = calendar;
+//handle['/calendar'] = calendar;
 
 server.start(router.route, handle);
 
@@ -65,7 +65,7 @@ function tokenReceived(response, error, token) {
                        'node-tutorial-token-expires=' + token.token.expires_at.getTime() + ';Max-Age=4000',
                        'node-tutorial-email=' + email + ';Max-Age=4000'];
         response.setHeader('Set-Cookie', cookies);
-        response.writeHead(302, {'Location': 'ec2-34-205-29-189.compute-1.amazonaws.com:4443/authorize'});
+        response.writeHead(302, {'Location': 'ec2-34-205-29-189.compute-1.amazonaws.com:4443/mail'});
         response.end();
       }
     }); 
