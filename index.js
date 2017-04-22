@@ -168,6 +168,13 @@ outlook.calendar.getEvents({token: token, odataParams: queryParams},
     }
   });
 }
+    } else {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+      response.write('<p> No token found in cookie!</p>');
+      response.end();
+    }
+  });
+}
 
 function mail(response, request) {
   getAccessToken(request, response, function(error, token) {
