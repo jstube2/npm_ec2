@@ -6,7 +6,7 @@ var authHelper = require('./authHelper');
 
 var handle = {};
 handle['/'] = home;
-handle['/authorize'] = authorize;
+handle['/authorization'] = authorize;
 handle['/mail'] = mail;
 handle['/calendar'] = calendar;
 
